@@ -1,4 +1,4 @@
-body{
+#div{
     position: relative;
     background-color: lightgray;
     border-style: solid;
@@ -42,5 +42,6 @@ body{
 #deg{
     margin: 10px;
     position: absolute;
+    z-index: 1;
 }
 
