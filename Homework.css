@@ -1,4 +1,4 @@
-#div{
+body{
     position: relative;
     background-color: lightgray;
     border-style: solid;
@@ -7,7 +7,7 @@
     /*border-style: solid;
     border-color: black;
     border-width: 2px;*/
-    height: 96vh;
+    height: 97vh;
 }
 #aim{
     background-color: red;
@@ -17,6 +17,7 @@
     top: 45vh;*/
     border-radius: 50%;
     position: absolute;
+    z-index: 1;
 }
 #gun{
     background-color: black;
@@ -26,6 +27,7 @@
     border-bottom-left-radius: 50px;
     border-top-left-radius: 50px;
     transform-origin: 15px 50%;
+    z-index: 1;
     /*left: 5vw;
     top: 45vh;*/
 }
@@ -37,10 +39,15 @@
     position: absolute;
     /*left: 10vw;
     top: 45vh;*/
-    z-index: -1;
+    z-index: 0;
 }
 #deg{
     margin: 10px;
+    position: absolute;
+    z-index: 1;
+}
+#ytx{
+    margin: 30px 10px;
     position: absolute;
     z-index: 1;
 }

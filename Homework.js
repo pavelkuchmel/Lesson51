@@ -2,8 +2,9 @@ let aim = document.getElementById("aim");
 let bullet = document.getElementById("bullet");
 let gun = document.getElementById("gun");
 let deg = document.getElementById("deg");
-const bulletStartingX = bullet.getClientRects()[0].left;
-let bulletCurrentX = bullet.getClientRects()[0].left;
+let ytx = document.getElementById("ytx");
+/*const bulletStartingX = bullet.getClientRects()[0].left;
+let bulletCurrentX = bullet.getClientRects()[0].left;*/
 let move = false;
 let mouseDown = false;
 
@@ -12,22 +13,30 @@ let deg = document.createElement('p');
 document.appendChild(deg);
 */
 
-console.log('clientWidth: ' + document.body.clientWidth + ' clientHeight: ' + document.body.clientHeight);
-console.log('offsetWidth: ' + document.body.offsetWidth + ' clientHeight: ' + document.body.offsetHeight);
-let clientRects = document.body.getClientRects();
-console.log(clientRects);
+/*console.log('document.body.offsetWidth: ' + document.body.offsetWidth + ' document.body.offsetHeight: ' + document.body.offsetHeight);
+console.log('document.body.clientWidth: ' + document.body.clientWidth + ' document.body.clientHeight: ' + document.body.clientHeight);*/
 
 aim.style.top = document.body.offsetHeight / 2 - 25 + 'px';
 aim.style.left = document.body.offsetWidth - 80 - 25 + 'px';
 
-gun.style.top = document.body.offsetHeight / 2 - 15 + 'px';
+gun.style.top = (document.body.offsetHeight) / 2 - 15 + 'px';
+
+/*console.log('gun.style.top: ' + gun.style.top)
+console.log('document.body.offsetHeight/2: ' + document.body.offsetHeight/2);*/
 
 bullet.style.top = document.body.offsetHeight / 2 - 13 + 'px';
+
+const bulletStartingX = bullet.offsetLeft;
+let bulletCurrentX = bullet.offsetLeft;
+
+console.log('document.body.offsetWidth: ' + document.body.offsetWidth + ' document.body.offsetHeight: ' + document.body.offsetHeight);
+console.log('document.body.clientWidth: ' + document.body.clientWidth + ' document.body.clientHeight: ' + document.body.clientHeight);
+console.log('document.body.offsetTop: ' + document.body.offsetTop);
 
 function moveBullet(mouseX, mouseY){
     if (move) {
         bulletCurrentX ++;
-        if (bulletCurrentX >= aim.getClientRects()[0].left) {
+        if (bulletCurrentX >= aim.offsetLeft) {
             bulletCurrentX = bulletStartingX;
             move = false;
         }
@@ -36,7 +45,18 @@ function moveBullet(mouseX, mouseY){
         }
         bullet.style.left = bulletCurrentX+'px';
     }
-};
+}
+
+function getY(rad, x){
+    let currY;
+    let yY = Math.round((Math.tan(rad) * x));
+    if (yY > 0){
+        currY = yY + (document.body.offsetHeight + document.body.getClientRects()[0].top) / 2;
+    }else {
+        currY = (document.body.offsetHeight + document.body.getClientRects()[0].top) / 2 + yY;
+    }
+    return currY;
+}
 
 addEventListener("click", function (event){
     if (!move) {
@@ -72,26 +92,25 @@ addEventListener('mouseup', function (){
 
 document.body.addEventListener("mousemove", function (event){
     if (mouseDown){
-        let x = event.pageX;
+        let x = event.x;
         let y;
-        if (event.pageY > document.body.offsetHeight / 2) {
-            y = event.pageY - document.body.offsetHeight / 2;
+        let currY;
+        if (event.y > (document.body.offsetHeight + document.body.getClientRects()[0].top) / 2) {
+            y = event.y - (document.body.offsetHeight + document.body.getClientRects()[0].top) / 2;
         } else {
-            y = -(document.body.clientHeight / 2 - event.pageY);
+            y = -((document.body.offsetHeight + document.body.getClientRects()[0].top) / 2 - event.y);
         }
-        console.log(event.pageY);
-        /*if (x > Math.abs(y)) {
-            console.log(x / y);
-        } else {
-            console.log(y / x);
-        }*/
+        console.log(event.y);
         let d = Math.atan(y / x) * (180 / Math.PI);
         gun.style.transform = 'rotate(' + d + 'deg)';
         deg.innerHTML = d + 'deg';
+
+        ytx.innerHTML = getY(Math.atan(y / x), x);
     }
 });
 
-
-
-
-
+console.log('gun.getClientRects()[0].top: ' + gun.getClientRects()[0].top);
+console.log('gun.style.top: ' + gun.style.top);
+console.log('gun.offsetTop: ' + gun.offsetTop);
+console.log('document.body.offsetHeight/2: ' + document.body.offsetHeight/2);
+console.log('document.body.getClientRects()[0].top: ' + document.body.getClientRects()[0].top);
