@@ -7,6 +7,10 @@ let ytx = document.getElementById("ytx");
 let bulletCurrentX = bullet.getClientRects()[0].left;*/
 let move = false;
 let mouseDown = false;
+let x;
+let y;
+let d;
+let rad;
 
 /*
 let deg = document.createElement('p');
@@ -28,43 +32,47 @@ bullet.style.top = document.body.offsetHeight / 2 - 13 + 'px';
 
 const bulletStartingX = bullet.offsetLeft;
 let bulletCurrentX = bullet.offsetLeft;
+const bulletStartingY = bullet.offsetTop + bullet.offsetHeight / 2;
+let bulletCurrentY = bullet.offsetTop + bullet.offsetHeight / 2;
 
 console.log('document.body.offsetWidth: ' + document.body.offsetWidth + ' document.body.offsetHeight: ' + document.body.offsetHeight);
 console.log('document.body.clientWidth: ' + document.body.clientWidth + ' document.body.clientHeight: ' + document.body.clientHeight);
 console.log('document.body.offsetTop: ' + document.body.offsetTop);
 
-function moveBullet(mouseX, mouseY){
+function getY(rad, x){
+    let result;
+    let yY = Math.tan(rad) * x;
+    if (yY > 0){
+        result = yY + (document.body.offsetHeight + document.body.getClientRects()[0].top) / 2;
+    }else {
+        result = (document.body.offsetHeight + document.body.getClientRects()[0].top) / 2 + yY;
+    }
+    return Math.round(result);
+}
+
+function moveBullet(){
     if (move) {
         bulletCurrentX ++;
+        bulletCurrentY = getY(rad, bulletCurrentX);
+        console.log(getY(rad, bulletCurrentX));
         if (bulletCurrentX >= aim.offsetLeft) {
             bulletCurrentX = bulletStartingX;
             move = false;
         }
         else {
-            setTimeout(moveBullet, 50);
+            setTimeout(moveBullet, 10);
         }
         bullet.style.left = bulletCurrentX+'px';
+        bullet.style.top = bulletCurrentY - bullet.offsetHeight / 2 + 'px';
     }
 }
 
-function getY(rad, x){
-    let currY;
-    let yY = Math.round((Math.tan(rad) * x));
-    if (yY > 0){
-        currY = yY + (document.body.offsetHeight + document.body.getClientRects()[0].top) / 2;
-    }else {
-        currY = (document.body.offsetHeight + document.body.getClientRects()[0].top) / 2 + yY;
-    }
-    return currY;
-}
-
-addEventListener("click", function (event){
+/*addEventListener("click", function (event){
     if (!move) {
         move = true;
         moveBullet(event.pageX, event.pageY);
     }
-
-});
+});*/
 
 addEventListener("keydown", function (event){
     console.log(event.code);
@@ -88,20 +96,24 @@ addEventListener('mousedown', function (){
 
 addEventListener('mouseup', function (){
     mouseDown = false;
+    if (!move) {
+        move = true;
+        moveBullet();
+    }
+    //console.log('x: ' + x + ' y: ' + y);
 });
 
 document.body.addEventListener("mousemove", function (event){
     if (mouseDown){
-        let x = event.x;
-        let y;
-        let currY;
+        x = event.x;
         if (event.y > (document.body.offsetHeight + document.body.getClientRects()[0].top) / 2) {
             y = event.y - (document.body.offsetHeight + document.body.getClientRects()[0].top) / 2;
         } else {
             y = -((document.body.offsetHeight + document.body.getClientRects()[0].top) / 2 - event.y);
         }
         console.log(event.y);
-        let d = Math.atan(y / x) * (180 / Math.PI);
+        rad = Math.atan(y / x);
+        d = Math.atan(y / x) * (180 / Math.PI);
         gun.style.transform = 'rotate(' + d + 'deg)';
         deg.innerHTML = d + 'deg';
 
