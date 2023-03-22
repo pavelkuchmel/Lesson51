@@ -57,13 +57,14 @@ function moveBullet(){
         console.log(getY(rad, bulletCurrentX));
         if (bulletCurrentX >= aim.offsetLeft) {
             bulletCurrentX = bulletStartingX;
+            bulletCurrentY = bulletStartingY;
             move = false;
         }
         else {
             setTimeout(moveBullet, 10);
         }
-        bullet.style.left = bulletCurrentX+'px';
         bullet.style.top = bulletCurrentY - bullet.offsetHeight / 2 + 'px';
+        bullet.style.left = bulletCurrentX+'px';
     }
 }
 
